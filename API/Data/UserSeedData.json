@@ -108,7 +108,7 @@
     "Country": "Greece",
     "Photos": [
       {
-        "Url": "https://randomuser.me/api/portraits/man/81.jpg",
+        "Url": "https://randomuser.me/api/portraits/men/81.jpg",
         "IsMain": true
       }
     ]
@@ -127,7 +127,7 @@
     "Country": "South Africa",
     "Photos": [
       {
-        "Url": "https://randomuser.me/api/portraits/man/38.jpg",
+        "Url": "https://randomuser.me/api/portraits/men/38.jpg",
         "IsMain": true
       }
     ]
@@ -146,7 +146,7 @@
     "Country": "Yugoslavia",
     "Photos": [
       {
-        "Url": "https://randomuser.me/api/portraits/man/75.jpg",
+        "Url": "https://randomuser.me/api/portraits/men/75.jpg",
         "IsMain": true
       }
     ]
@@ -165,7 +165,7 @@
     "Country": "Cuba",
     "Photos": [
       {
-        "Url": "https://randomuser.me/api/portraits/man/97.jpg",
+        "Url": "https://randomuser.me/api/portraits/men/97.jpg",
         "IsMain": true
       }
     ]
@@ -184,7 +184,7 @@
     "Country": "Mozambique",
     "Photos": [
       {
-        "Url": "https://randomuser.me/api/portraits/man/30.jpg",
+        "Url": "https://randomuser.me/api/portraits/men/30.jpg",
         "IsMain": true
       }
     ]
