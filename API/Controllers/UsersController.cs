@@ -32,13 +32,13 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
             var user = await _userRepository.GetByUsernameAsync(User.GetUserName());
 
             userParams.CurrentUsername = user.UserName;
 
-            if(string.IsNullOrEmpty(userParams.Gender))
+            if (string.IsNullOrEmpty(userParams.Gender))
             {
                 userParams.Gender = user.Gender == "male" ? "female" : "male";
             }
@@ -50,7 +50,6 @@ namespace API.Controllers
             return Ok(users);
         }
 
-        //api/users/3
         [HttpGet("{username}", Name = "GetUser")]
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
