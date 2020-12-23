@@ -27,8 +27,8 @@ namespace API.Controllers
             .Select(u => new
             {
                 u.Id,
-                UserName = u.UserName,
-                Roles = u.UserRoles.Select(r => r.Role.Name).ToList()
+                username = u.UserName,
+                roles = u.UserRoles.Select(r => r.Role.Name).ToList()
             })
             .ToListAsync();
 
