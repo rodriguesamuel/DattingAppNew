@@ -90,7 +90,7 @@ namespace API.Controllers
 
             if (message.SenderDeleted && message.RecipientDeleted) _messageRepository.DeleteMessage(message);
 
-            if(await _messageRepository.SaveAllAsync()) return Ok();
+            if (await _messageRepository.SaveAllAsync()) return Ok();
 
             return BadRequest("Problem deleting the message");
         }
