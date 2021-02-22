@@ -49,7 +49,7 @@ export class MembersService {
       return of(response);
     }
 
-    console.log(Object.values(userParams).join('-'));
+    //console.log(Object.values(userParams).join('-'));
     let params = getPaginationHeader(
       userParams.pageNumber,
       userParams.pageSize
