@@ -173,7 +173,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("GroupName");
 
-                    b.ToTable("Connections");
+                    b.ToTable("Connection");
                 });
 
             modelBuilder.Entity("API.Entities.Group", b =>
@@ -241,6 +241,9 @@ namespace API.Data.Migrations
 
                     b.Property<int>("AppUserId")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsMain")
                         .HasColumnType("boolean");

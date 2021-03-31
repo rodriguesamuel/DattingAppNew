@@ -1,1 +1,15 @@
-<p>photo-management works!</p>
+<div class="row">
+    <table class="table">
+        <th>Username</th>
+        <th>Photo</th>
+        <th>Actions</th>
+        <tr *ngFor="let photo of photos">
+            <td>{{photo.username}}</td>
+            <td><img src="{{photo.url}}" style="width: 150px;" ></td>
+            <td>
+                <button (click)="$event.stopPropagation()" (click)="aprovePhoto(photo.id)" class="btn btn-success">Approve</button>
+                <button (click)="$event.stopPropagation()" (click)="rejectPhoto(photo.id)" class="btn btn-danger">Reject</button>
+            </td>
+        </tr>
+    </table>
+</div>

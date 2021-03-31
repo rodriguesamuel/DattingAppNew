@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,8 +12,12 @@ namespace API.Controllers
     public class AdminController : BaseApiController
     {
         private readonly UserManager<AppUser> _userManager;
-        public AdminController(UserManager<AppUser> userManager)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IPhotoService _photoService;
+        public AdminController(UserManager<AppUser> userManager, IUnitOfWork unitOfWork, IPhotoService photoService)
         {
+            _photoService = photoService;
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
         }
 
@@ -42,26 +47,72 @@ namespace API.Controllers
 
             var user = await _userManager.FindByNameAsync(username);
 
-            if(user == null) return NotFound("Could not find user");
+            if (user == null) return NotFound("Could not find user");
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var result = await _userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles));
 
-            if(!result.Succeeded) return BadRequest("Failed to add to roles");  
+            if (!result.Succeeded) return BadRequest("Failed to add to roles");
 
             result = await _userManager.RemoveFromRolesAsync(user, userRoles.Except(selectedRoles));
 
-            if(!result.Succeeded) return BadRequest("Failed to remove from roles");
+            if (!result.Succeeded) return BadRequest("Failed to remove from roles");
 
             return Ok(await _userManager.GetRolesAsync(user));
         }
 
         [Authorize(Policy = "ModeratePhotoRole")]
         [HttpGet("photos-to-moderate")]
-        public ActionResult GetPhotosForModeration()
+        public async Task<ActionResult> GetPhotosForModeration()
         {
-            return Ok("Admins or moderators can see this");
+            return Ok(await _unitOfWork.PhotosRepository.GetUnapprovedPhotos());
+        }
+
+        [Authorize(Policy = "ModeratePhotoRole")]
+        [HttpPut("aprove-photo/{photoId}")]
+        public async Task<ActionResult> AprovePhoto(int photoId)
+        {
+            Photo photo = await _unitOfWork.PhotosRepository.GetPhotoById(photoId);
+
+            if (photo is null) return BadRequest("This photo dont exist");
+
+            if (photo.IsApproved) return BadRequest("This is already aproved");
+
+            photo.IsApproved = true;
+
+            var mainPhotos = await _unitOfWork.PhotosRepository.GetMainPhotoByUserId(photo.AppUserId);
+
+            if (mainPhotos == 0)
+            {
+                photo.IsMain = true;
+            }
+
+            if (await _unitOfWork.Complete()) return NoContent();
+
+            return BadRequest("Failed to aprove photo");
+        }
+
+        [Authorize(Policy = "ModeratePhotoRole")]
+        [HttpPut("reject-photo/{photoId}")]
+        public async Task<ActionResult> RejectPhoto(int photoId)
+        {
+            var photo = await _unitOfWork.PhotosRepository.GetPhotoById(photoId);
+
+            if (photo is null) return NotFound();
+
+            if (photo.PublicId != null)
+            {
+                var result = await _photoService.DeletePhotoAsync(photo.PublicId);
+
+                if (result.Error != null) return BadRequest(result.Error.Message);
+            }
+
+            _unitOfWork.PhotosRepository.RemovePhoto(photo);
+
+            if (await _unitOfWork.Complete()) return Ok();
+
+            return BadRequest("Failed to delete de photo");
         }
     }
 }

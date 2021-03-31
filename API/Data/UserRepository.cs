@@ -29,9 +29,16 @@ namespace API.Data
             .SingleOrDefaultAsync(x => x.UserName == username);
         }
 
-        public async Task<MemberDto> GetMemberAsync(string username)
+        public async Task<MemberDto> GetMemberAsync(string username, string currentUsername)
         {
-            return await _context.Users.Where(x => x.UserName == username)
+            var query = _context.Users.AsQueryable();
+
+            if(username == currentUsername)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            return await query.Where(x => x.UserName == username)
             .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
             .SingleOrDefaultAsync();
         }

@@ -1,13 +1,29 @@
 img.img-thumbnail {
-    height: 100px;
-    min-width: 100px !important;
-    margin-bottom: 2px;
+  height: 100px;
+  min-width: 100px !important;
+  margin-bottom: 2px;
 }
 
 .nv-file-over {
-    border: dotted 3px red;
+  border: dotted 3px red;
 }
 
-input[type=file] {
-    color: transparent;
+input[type="file"] {
+  color: transparent;
+}
+
+.wating-approval {
+  opacity: 0.2;
+}
+.wating-approval-text {
+  display: none;
+  color: red;
+  top: 40px;
+}
+.photo {
+  position: relative;
+}
+.show-text {
+  display: block;
+  position: absolute;
 }
